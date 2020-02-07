@@ -10,7 +10,7 @@ public class WeaponPanel : MonoBehaviour
 
     private List<ItemInfoWeapon> items = new List<ItemInfoWeapon>();
     private CharacterManager target;
-    private List<ISpell> weapons = new List<ISpell>();
+    private List<Spell> weapons = new List<Spell>();
 
     #region Singleton
     static protected WeaponPanel s_Instance;

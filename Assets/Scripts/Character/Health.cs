@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Health : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class Health : MonoBehaviour
     private void OnDie()
     {
         isDie = true;
+        StartCoroutine(Resurrection());
     }
 
+    public IEnumerator Resurrection()
+    {
+        yield return new WaitForSeconds(2f);
+    }
 }

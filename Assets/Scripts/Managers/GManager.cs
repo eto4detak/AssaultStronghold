@@ -23,6 +23,8 @@ public class GManager : MonoBehaviour
     {
         statistic.Setup(units);
         Level.instance.StartRound();
+        MainMenuManager.instance.HideMainMenu();
+        GMode.instance.ContinueGame();
         WeaponPanel.instance.SetTarget(Level.instance.playerHunter);
     }
 

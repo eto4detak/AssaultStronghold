@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7978103086168129967
+--- !u!1 &6104837054407270717
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1980626560354411818}
-  - component: {fileID: 3680873597819800188}
+  - component: {fileID: 2095602062214388691}
+  - component: {fileID: 9087185483533797085}
   m_Layer: 0
-  m_Name: IceArrow
+  m_Name: ChaosFlameSpell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1980626560354411818
+--- !u!4 &2095602062214388691
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7978103086168129967}
+  m_GameObject: {fileID: 6104837054407270717}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -509.88705, y: 43.81924, z: 101.001175}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3680873597819800188
+--- !u!114 &9087185483533797085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7978103086168129967}
+  m_GameObject: {fileID: 6104837054407270717}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e24ad5b373c0a7749999c8265a4c1f61, type: 3}
+  m_Script: {fileID: 11500000, guid: 28783982b9ddf264eb44c433ff17afc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 2df678574a6d9f64a8526895f6a7c541, type: 2}
-  remainingTime: 2
-  isLive: 1
+  data: {fileID: 11400000, guid: 290b78d9a3fc9064389f46caf2565333, type: 2}
+  phSpellPrefab: {fileID: 7991273932250127643, guid: 950982d113ae23a44ab1a9c728c37242,
+    type: 3}

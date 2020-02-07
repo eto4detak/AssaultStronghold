@@ -15,13 +15,12 @@ public class Level : MonoBehaviour
     public CharacterManager playerHunter;
     public List<GameObject> finishedSportsman = new List<GameObject>();
 
-    private int countRounds = 10;
-    private int currentRound = 0;
+    private int roundNumber = 0;
     private WaitForSeconds startWait;
     private WaitForSeconds endWait;
-    private int roundNumber;
     private GameObject roundWinner;
     private GameObject gameWinner;
+    private LevelRecord records;
     #region Singleton
     static protected Level s_Instance;
     static public Level instance { get { return s_Instance; } }
@@ -39,6 +38,7 @@ public class Level : MonoBehaviour
         #endregion
         startWait = new WaitForSeconds(startDelay);
         endWait = new WaitForSeconds(endDelay);
+        records = new LevelRecord();
     }
 
 
@@ -49,33 +49,40 @@ public class Level : MonoBehaviour
 
     private IEnumerator GameLoop()
     {
-        yield return StartCoroutine(RoundStarting());
-        yield return StartCoroutine(RoundPlaying());
-        yield return StartCoroutine(RoundEnding());
-        currentRound++;
-        if (currentRound < countRounds)
+        while (roundNumber < LevelManager.instance.levelData.partyCount)
         {
-            StartRound();
+            yield return StartCoroutine(RoundStarting());
+            yield return StartCoroutine(RoundPlaying());
+            yield return StartCoroutine(RoundEnding());
         }
-        else
-        {
-
-        }
+        CheckWinPlayer();
     }
+
+
+    private void CheckWinPlayer()
+    {
+        if(records.GetAverage() <= 2)
+            LevelManager.instance.LoadNextLevel();
+        else
+            LevelManager.instance.RestartLevel();
+    }
+
 
     private IEnumerator RoundStarting()
     {
         ResetAllSportsmans();
         DisableSportsmanPath();
-        //m_CameraControl.SetStartPositionAndSize();
         roundNumber++;
-        messageText.text = "ROUND " + roundNumber;
+        messageText.gameObject.SetActive(true);
+        messageText.text = "Level " + LevelManager.instance.levelData.levelNumber;
+        messageText.text += "    ROUND " + roundNumber;
         yield return startWait;
     }
 
     private IEnumerator RoundPlaying()
     {
         EnableSportmanPath();
+        messageText.gameObject.SetActive(false);
         messageText.text = string.Empty;
         while (!FinishedPlayer())
         {
@@ -85,16 +92,14 @@ public class Level : MonoBehaviour
 
     private IEnumerator RoundEnding()
     {
-        DisableSportsmanPath();
+        records.recordList.Add( finishedSportsman.Count);
         roundWinner = null;
         roundWinner = GetRoundWinner();
-        //if (m_RoundWinner != null)
-        //    m_RoundWinner.m_Wins++;
         gameWinner = GetGameWinner();
+        messageText.gameObject.SetActive(true);
         messageText.text = EndMessage();
 
-        Debug.Log("finished");
-
+        DisableSportsmanPath();
         yield return endWait;
     }
 
@@ -111,8 +116,7 @@ public class Level : MonoBehaviour
     {
         for (int i = 0; i < sportsmans.Length; i++)
         {
-            //if (m_Tanks[i].m_Instance.activeSelf)
-            //    return m_Tanks[i];
+
         }
         return null;
     }
@@ -121,8 +125,7 @@ public class Level : MonoBehaviour
     {
         for (int i = 0; i < sportsmans.Length; i++)
         {
-            //if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
-            //    return m_Tanks[i];
+
         }
 
         return null;
@@ -134,9 +137,9 @@ public class Level : MonoBehaviour
         //if (m_RoundWinner != null)
         //    message = m_RoundWinner.m_ColoredPlayerText + " WINS THE ROUND!";
         message += "\n\n\n\n";
-        for (int i = 0; i < finishedSportsman.Count; i++)
+        for (int i = 0; i < records.recordList.Count; i++)
         {
-            message += finishedSportsman[i] + " " + i + " \n";
+            message += records.recordList[i] + " \n";
         }
         //if (m_GameWinner != null)
         //    message = m_GameWinner.m_ColoredPlayerText + " WINS THE GAME!";
@@ -157,6 +160,7 @@ public class Level : MonoBehaviour
     {
         for (int i = 0; i < sportsmans.Length; i++)
         {
+            sportsmans[i].mission.ResetRound();
             sportsmans[i].mission.path = new List<MissionLine>(path);
         }
     }

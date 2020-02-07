@@ -5,7 +5,6 @@ using System;
 
 public class GameHUD : MonoBehaviour
 {
-
     [Header("Images")]
     public GameObject frontImg;
     public GameObject targetImg;

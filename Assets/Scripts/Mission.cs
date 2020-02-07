@@ -7,13 +7,30 @@ public class Mission : MonoBehaviour
 {
     public List<MissionLine> path;
     public CharacterNavMovement movement;
-
     public bool isFinish;
     public int currentIndexPoint;
+    public int roundCount;
+
+    private List<CharacterManager> rivals;
+    private CharacterManager self;
+    private float deltaTime;
+    private float changeSpellTime = 1f;
+
+    private void Awake()
+    {
+        self = GetComponent<CharacterManager>();
+    }
+
 
     private void Update()
     {
         DoMission();
+        ApplySpell();
+    }
+
+    public void ResetRound()
+    {
+        roundCount = LevelManager.instance.levelData.roundCount;
     }
 
     private void DoMission()
@@ -21,8 +38,10 @@ public class Mission : MonoBehaviour
         if (isFinish)
         {
             movement.Stop();
+            return;
         }
-        else if (path.Count > 0)
+
+        if (path.Count > 0)
         {
             if (movement.needChangeNumberPath)
             {
@@ -33,6 +52,28 @@ public class Mission : MonoBehaviour
                 movement.MoveToPoint(GetNextPoint(movement.transform).position);
         }
     }
+
+    private void ApplySpell()
+    {
+        deltaTime += Time.deltaTime;
+        if (deltaTime < changeSpellTime) return;
+
+        deltaTime = 0;
+        rivals = Statistic.instance.GetRivalForSportman(self);
+        for (int r = 0; r < rivals.Count; r++)
+        {
+            for (int a = 0; a < self.attack.arsenal.Count; a++)
+            {
+                if (self.attack.arsenal[a].IsMayApply(self.transform, rivals[r].transform))
+                {
+                    self.attack.SelectSpell(self.attack.arsenal[a]);
+                    self.attack.Attack(rivals[r].health);
+                    return;
+                }
+            }
+        }
+    }
+
 
     public Transform GetNextPoint(Transform movement)
     {
@@ -106,8 +147,17 @@ public class Mission : MonoBehaviour
         path.RemoveAt(0);
         if(path.Count == 0)
         {
-            isFinish = true;
-            Level.instance.finishedSportsman.Add(movement.gameObject);
+            roundCount--;
+            if(roundCount > 0)
+            {
+                path = new List<MissionLine>(Level.instance.path);
+            }
+            else
+            {
+                isFinish = true;
+                Level.instance.finishedSportsman.Add(movement.gameObject);
+            }
+
         }
     }
 }

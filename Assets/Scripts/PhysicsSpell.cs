@@ -42,7 +42,6 @@ public class PhysicsSpell : MonoBehaviour
         {
             var instance = Instantiate(imposed, transform.position, transform.rotation);
             sportman.characteristic.AddFeature(instance);
-
         }
     }
 }

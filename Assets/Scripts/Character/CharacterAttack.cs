@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class CharacterAttack : MonoBehaviour
 {
-    public List<ISpell> arsenal = new List<ISpell>();
+    public List<Spell> arsenal = new List<Spell>();
     public bool isAttack = false;
     public Animator animator;
     private readonly int hashAttackPara = Animator.StringToHash("Attack");
@@ -14,23 +14,7 @@ public class CharacterAttack : MonoBehaviour
     private ISpell selectedSpell;
     private void Awake()
     {
-
-        arsenal.Add(Resources.Load<Spell>("Spell/ChaosFlame"));
-        selectedSpell = arsenal[0];
-    }
-
-    private void Update()
-    {
-        if (target)
-        {
-            isAttack = true;
-           // Attacking(null);
-        }
-        else
-        {
-            isAttack = false;
-            return;
-        }
+        if (arsenal.Count > 0) selectedSpell = arsenal[0];
     }
 
     //private void OnTriggerStay(Collider other)
@@ -62,20 +46,15 @@ public class CharacterAttack : MonoBehaviour
     {
         target = newTarget;
         isAttack = true;
-
-        Debug.Log("attack " + selectedSpell + " " );
-
         selectedSpell.DoSpell(this, newTarget.transform);
     }
-
 
     public void SelectSpell(ISpell select)
     {
         if(select != null &&  arsenal.Exists(x => x.Equals(select))) selectedSpell = select;
     }
 
-
-    private void EventAttack()
+    public void EventAttack()
     {
         if (target)
         {
@@ -105,4 +84,6 @@ public class CharacterAttack : MonoBehaviour
         transform.LookAt(target.transform);
         if(_target)  selectedSpell.DoSpell(this, _target.transform);
     }
+
+
 }
